@@ -1,0 +1,27 @@
+import Cursor from '@/components/ui/Cursor'
+import Navbar from '@/components/ui/Navbar'
+import Divider from '@/components/ui/Divider'
+import Hero from '@/components/sections/Hero'
+import Experience from '@/components/sections/Experience'
+import Projects from '@/components/sections/Projects'
+import Skills from '@/components/sections/Skills'
+import Contact from '@/components/sections/Contact'
+
+export default function Home() {
+  return (
+    <>
+      <Cursor />
+      <Navbar />
+      <main>
+        <Hero />
+        <Divider />
+        <Experience />
+        <Divider />
+        <Projects />
+        <Divider />
+        <Skills />
+        <Contact />
+      </main>
+    </>
+  )
+}
