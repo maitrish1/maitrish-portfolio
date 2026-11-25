@@ -1,78 +1,71 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import Reveal from '@/components/ui/Reveal'
 import { personal } from '@/lib/data'
 
 export default function Contact() {
   return (
-    <>
-      <section
-        id="contact"
-        className="px-10 md:px-16 py-28 text-center mx-auto"
-        style={{ borderTop: '1px solid var(--border)', maxWidth: '1200px' }}
-      >
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+    <section id="contact" className="px-4 sm:px-6 md:px-16 py-10 md:py-20 mx-auto" style={{ maxWidth: 1200, borderTop: '1px solid var(--border)' }}>
+      <Reveal y={24}>
+        <div
+          className="rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-12 lg:p-16 text-center relative overflow-hidden"
+          style={{ background: 'var(--surface)', border: '1px solid rgba(217,59,33,0.18)', boxShadow: 'var(--shadow)' }}
         >
-          <p className="font-mono text-xs tracking-[4px] uppercase mb-6" style={{ color: 'var(--muted)' }}>
-            Let&apos;s build something together
-          </p>
+          <div className="absolute -top-16 -left-16 w-48 h-48 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, var(--coral-light) 0%, transparent 70%)' }} />
+          <div className="absolute -bottom-16 -right-16 w-48 h-48 rounded-full pointer-events-none" style={{ background: 'radial-gradient(circle, var(--forest-light) 0%, transparent 70%)' }} />
 
-          <a
-            href={`mailto:${personal.email}`}
-            className="font-display font-black text-white inline-block relative group transition-colors duration-300"
-            style={{ fontSize: 'clamp(28px, 4vw, 52px)' }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--green)'}
-            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#fff'}
+          <span
+            className="inline-flex font-mono text-[11px] font-medium px-3 py-1 rounded-full mb-4"
+            style={{ background: 'var(--coral-light)', color: 'var(--coral)', border: '1px solid rgba(217,59,33,0.2)' }}
           >
-            {personal.email}
-            <span
-              className="absolute -bottom-1 left-0 right-0 h-0.5 transition-transform duration-300 origin-left scale-x-0 group-hover:scale-x-100"
-              style={{ background: 'var(--green)' }}
-            />
-          </a>
-
-          <div className="flex justify-center gap-10 mt-12 flex-wrap">
-            {[
-              { label: 'LinkedIn', url: personal.links.linkedin },
-              { label: 'GitHub', url: personal.links.github },
-              { label: 'Dev.to', url: personal.links.devto },
-              { label: 'ChqMe', url: 'https://chqme.com' },
-            ].map(link => (
-              <a
-                key={link.label}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-mono text-xs tracking-widest uppercase flex items-center gap-2 transition-colors duration-200"
-                style={{ color: 'var(--muted)' }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--green)'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--muted)'}
-              >
-                <span>↗</span>{link.label}
-              </a>
-            ))}
+            Let&apos;s build something together
+          </span>
+          <h2 className="font-display font-black leading-tight mb-3" style={{ fontSize: 'clamp(20px, 5vw, 52px)', color: 'var(--text)' }}>
+            Have a project in mind?
+          </h2>
+          <p className="font-body text-sm md:text-base mb-6 md:mb-8 max-w-md mx-auto" style={{ color: 'var(--text-dim)' }}>
+            I&apos;m open to full-time Full Stack Founding Engineer &amp; Architect roles, founding engineer positions, and interesting contract work.
+          </p>
+          <div className="mb-6 md:mb-8 overflow-hidden px-2">
+            <a
+              href={`mailto:${personal.email}`}
+              className="font-display font-bold inline-block transition-colors duration-200 break-all"
+              style={{ fontSize: 'clamp(13px, 3vw, 36px)', color: 'var(--text)' }}
+            >
+              {personal.email}
+            </a>
           </div>
-        </motion.div>
-      </section>
-
-      <footer
-        className="px-10 md:px-16 py-6 flex flex-wrap justify-between items-center gap-4 mx-auto"
-        style={{ borderTop: '1px solid var(--border)', maxWidth: '1200px' }}
-      >
-        <span className="font-mono text-xs tracking-wide" style={{ color: 'var(--muted)' }}>
-          © 2026 Maitrish Mukherjee
-        </span>
-        <span className="font-mono text-xs tracking-wide" style={{ color: 'var(--muted)' }}>
-          maitrish.com<span className="cursor-blink" style={{ marginLeft: '2px' }} />
-        </span>
-        <span className="font-mono text-xs tracking-wide" style={{ color: 'var(--muted)' }}>
-          Bengaluru, KA · Open to relocate
-        </span>
-      </footer>
-    </>
+          <div className="flex justify-center gap-2 flex-wrap">
+            <a
+              href={personal.links.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-xs font-medium px-3 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1"
+              style={{ color: 'var(--text-dim)', background: 'var(--parchment)', border: '1px solid var(--border)' }}
+            >
+              LinkedIn ↗
+            </a>
+            <a
+              href={personal.links.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-xs font-medium px-3 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1"
+              style={{ color: 'var(--text-dim)', background: 'var(--parchment)', border: '1px solid var(--border)' }}
+            >
+              GitHub ↗
+            </a>
+            <a
+              href={personal.links.devto}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-xs font-medium px-3 py-1.5 rounded-full transition-all duration-200 flex items-center gap-1"
+              style={{ color: 'var(--text-dim)', background: 'var(--parchment)', border: '1px solid var(--border)' }}
+            >
+              Dev.to ↗
+            </a>
+          </div>
+        </div>
+      </Reveal>
+    </section>
   )
 }

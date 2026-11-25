@@ -1,152 +1,116 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import Reveal from '@/components/ui/Reveal'
 import { experience } from '@/lib/data'
-
-function ExpCard({ exp, index }: { exp: typeof experience[0]; index: number }) {
-  const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 32 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.55, ease: 'easeOut', delay: index * 0.1 }}
-      className="group relative border p-8 md:p-10 overflow-hidden transition-colors duration-300"
-      style={{
-        background: 'var(--bg2)',
-        borderColor: 'var(--border)',
-      }}
-      onMouseEnter={e => {
-        const el = e.currentTarget as HTMLElement
-        el.style.borderColor = 'rgba(0,255,136,0.4)'
-        el.style.background = '#0f0f0f'
-      }}
-      onMouseLeave={e => {
-        const el = e.currentTarget as HTMLElement
-        el.style.borderColor = 'var(--border)'
-        el.style.background = 'var(--bg2)'
-      }}
-    >
-      {/* Left accent bar */}
-      <div
-        className="absolute top-0 left-0 w-[3px] h-0 transition-all duration-500 group-hover:h-full"
-        style={{ background: 'var(--green)' }}
-      />
-
-      {/* Header */}
-      <div className="flex flex-wrap justify-between items-start gap-3 mb-5">
-        <h3 className="font-display font-bold text-xl text-white">{exp.role}</h3>
-        <span
-          className="font-mono text-xs tracking-wider px-3 py-1 border"
-          style={{ color: 'var(--green)', borderColor: 'rgba(0,255,136,0.2)', background: 'rgba(0,255,136,0.06)' }}
-        >
-          {exp.period}
-        </span>
-      </div>
-
-      {/* Company + links */}
-      <div className="flex flex-wrap items-center gap-4 mb-5">
-        <span className="font-mono text-sm" style={{ color: 'var(--muted)' }}>
-          {exp.company} · {exp.location}
-        </span>
-        <div className="flex flex-wrap gap-3">
-          {exp.links.map(link => (
-            <a
-              key={link.url}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-mono text-xs tracking-wide transition-colors duration-200 pb-px"
-              style={{
-                color: 'var(--cyan)',
-                borderBottom: '1px solid rgba(0,212,255,0.3)',
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget as HTMLElement
-                el.style.color = '#fff'
-                el.style.borderBottomColor = '#fff'
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget as HTMLElement
-                el.style.color = 'var(--cyan)'
-                el.style.borderBottomColor = 'rgba(0,212,255,0.3)'
-              }}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* Bullets */}
-      <ul className="space-y-2.5 mb-6">
-        {exp.bullets.map((bullet, i) => (
-          <li key={i} className="text-sm leading-relaxed pl-5 relative" style={{ color: '#999' }}>
-            <span
-              className="absolute left-0 top-[5px] text-[10px]"
-              style={{ color: 'var(--green)' }}
-            >
-              ▸
-            </span>
-            <span dangerouslySetInnerHTML={{
-              __html: bullet
-                .replace(/SharkNinja|Nester|Tiron|EcoFlow/g, '<strong style="color:#fff">$&</strong>')
-                .replace(/\d[\d,K+M→.%]+[+K%M]*/g, match =>
-                  /\d/.test(match) ? `<strong style="color:#fff">${match}</strong>` : match
-                )
-            }} />
-          </li>
-        ))}
-      </ul>
-
-      {/* Metrics */}
-      {exp.metrics.length > 0 && (
-        <div
-          className="flex flex-wrap gap-6 pt-5"
-          style={{ borderTop: '1px solid var(--border)' }}
-        >
-          {exp.metrics.map(m => (
-            <div key={m.label}>
-              <div className="font-display font-bold text-xl" style={{ color: 'var(--green)' }}>
-                {m.value}
-              </div>
-              <div className="font-mono text-[10px] tracking-wider uppercase mt-0.5" style={{ color: 'var(--muted)' }}>
-                {m.label}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </motion.div>
-  )
-}
 
 export default function Experience() {
   return (
-    <section id="experience" className="px-10 md:px-16 py-28 mx-auto" style={{ maxWidth: '1200px' }}>
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.5 }}
-      >
-        <p className="font-mono text-xs tracking-[4px] uppercase mb-4" style={{ color: 'var(--pink)' }}>
-          <span style={{ opacity: 0.5 }}>// </span>Career
-        </p>
-        <h2
-          className="font-display font-black leading-none mb-14"
-          style={{ fontSize: 'clamp(36px, 4vw, 56px)' }}
+    <section id="experience" className="px-4 sm:px-6 md:px-16 py-10 md:py-20 mx-auto" style={{ maxWidth: 1200 }}>
+      <Reveal y={16} className="flex flex-wrap items-end justify-between gap-3 mb-8 md:mb-12">
+        <div>
+          <span
+            className="inline-flex font-mono text-xs font-medium px-3 py-1 rounded-full mb-3"
+            style={{ background: 'var(--coral-light)', color: 'var(--coral)', border: '1px solid rgba(217,59,33,0.2)' }}
+          >
+            Career
+          </span>
+          <h2 className="font-display font-black leading-tight" style={{ fontSize: 'clamp(24px, 5vw, 52px)', color: 'var(--text)' }}>
+            Where I&apos;ve <span style={{ color: 'var(--coral)' }}>Shipped</span>
+          </h2>
+        </div>
+        <a
+          href="/experience"
+          className="inline-flex items-center gap-2 font-body text-sm font-bold px-4 py-2 rounded-full transition-all duration-150 hover:-translate-y-0.5"
+          style={{ background: 'var(--coral)', color: '#fff' }}
         >
-          Where I&apos;ve <span style={{ color: 'var(--green)' }}>Shipped</span>
-        </h2>
-      </motion.div>
+          Full history →
+        </a>
+      </Reveal>
 
-      <div className="grid gap-0.5">
-        {experience.map((exp, i) => (
-          <ExpCard key={exp.company} exp={exp} index={i} />
+      <div className="grid gap-4">
+        {experience.map((job) => (
+          <Reveal key={job.company} y={32}>
+            <div className="rounded-2xl overflow-hidden" style={{ background: 'var(--surface)', border: '1px solid var(--border)', boxShadow: 'var(--shadow)' }}>
+              <div className="h-[3px]" style={{ background: 'var(--coral)' }} />
+              <div className="p-4 sm:p-6 md:p-8 lg:p-10">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-3 mb-5">
+                  <div className="min-w-0 w-full sm:flex-1">
+                    <div className="flex flex-wrap items-center gap-1.5 mb-2">
+                      <span
+                        className="font-mono text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
+                        style={{ background: 'var(--forest-light)', color: 'var(--forest)', border: '1px solid rgba(26,94,64,0.2)' }}
+                      >
+                        {job.period}
+                      </span>
+                      <span
+                        className="font-mono text-[10px] px-2 py-0.5 rounded-full whitespace-nowrap"
+                        style={{ background: 'var(--parchment)', color: 'var(--text-muted)', border: '1px solid var(--border)' }}
+                      >
+                        {job.location}
+                      </span>
+                    </div>
+                    <h3 className="font-display font-black leading-tight mb-0.5 break-words" style={{ fontSize: 'clamp(16px, 3vw, 26px)', color: 'var(--text)' }}>
+                      {job.company}
+                    </h3>
+                    <p className="font-body text-sm font-bold italic" style={{ color: 'var(--coral)' }}>
+                      {job.role}
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 sm:flex-shrink-0">
+                    {job.links.map((link) => (
+                      <a
+                        key={link.url}
+                        href={link.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-mono text-[10px] px-2.5 py-1 rounded-full transition-all duration-150 hover:-translate-y-0.5 whitespace-nowrap"
+                        style={{ background: 'var(--coral-light)', color: 'var(--coral)', border: '1px solid rgba(217,59,33,0.2)' }}
+                      >
+                        {link.label} ↗
+                      </a>
+                    ))}
+                  </div>
+                </div>
+
+                {job.metrics && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-px mb-5 rounded-xl overflow-hidden" style={{ background: 'var(--border)' }}>
+                    {job.metrics.map((m) => (
+                      <div key={m.label} className="flex flex-col items-center justify-center py-3 px-2" style={{ background: 'var(--surface)' }}>
+                        <span className="font-display font-black leading-none mb-1" style={{ fontSize: 'clamp(14px, 2.5vw, 22px)', color: m.color }}>
+                          {m.value}
+                        </span>
+                        <span className="font-mono text-[9px] tracking-wide uppercase text-center" style={{ color: 'var(--text-muted)' }}>
+                          {m.label}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <ul className="space-y-2 mb-5">
+                  {job.bullets.map((b, i) => (
+                    <li key={i} className="flex gap-2.5 leading-relaxed">
+                      <span className="mt-[6px] flex-shrink-0 text-[7px]" style={{ color: 'var(--coral)' }}>◆</span>
+                      <span className="font-body text-sm" style={{ color: 'var(--text-dim)' }} dangerouslySetInnerHTML={{ __html: b }} />
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="flex justify-end">
+                  <a
+                    href="/experience"
+                    className="inline-flex items-center gap-1.5 font-body text-xs font-bold px-4 py-2 rounded-full transition-all duration-150 hover:-translate-y-0.5"
+                    style={{ background: 'var(--coral)', color: '#fff' }}
+                  >
+                    Full details
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </Reveal>
         ))}
       </div>
     </section>

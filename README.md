@@ -1,6 +1,6 @@
 # maitrish.com — Portfolio
 
-Dark hacker aesthetic portfolio built with Next.js 15, TailwindCSS, and Framer Motion.
+Light parchment-aesthetic portfolio built with Next.js 15, TailwindCSS, and Framer Motion.
 
 ## Stack
 - **Next.js 15** (App Router)
@@ -15,54 +15,64 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:3000](http://localhost:3000).
 
 ## Updating Content
 
 **All content lives in one file:** `lib/data.ts`
 
 - Personal info, links → `personal`
+- Hero bio → `hero`
 - Stats (hero numbers) → `stats`
 - Work experience → `experience`
-- Projects → `projects`
+- Projects → `projects` (+ `screenshotCounts`)
 - Skills → `skills`
 
 No need to touch any component files to update content.
-
-## Deploy to Vercel (Recommended)
-
-```bash
-npm i -g vercel
-vercel
-```
-
-Then in Vercel dashboard → Settings → Domains → Add `maitrish.com`
-
-Point your domain DNS:
-- A record: `76.76.21.21`
-- CNAME www: `cname.vercel-dns.com`
 
 ## Structure
 
 ```
 app/
-  layout.tsx       # Root layout + metadata
-  page.tsx         # Main page assembly
-  globals.css      # Global styles, scanlines, glitch animations
+  layout.tsx            # Root layout — metadata, JSON-LD, Cursor
+  page.tsx              # Home page assembly
+  live.css              # Compiled design system (CSS vars, utility classes)
+  globals.css           # Tailwind directives
+  projects/page.tsx     # Projects page
+  experience/page.tsx   # Full experience history
+  icon.png              # Favicon
+  opengraph-image.png   # OG image
 
 components/
   ui/
-    Cursor.tsx     # Custom cursor with lag ring
-    Navbar.tsx     # Fixed nav with scroll-aware active state
-    Divider.tsx    # Section divider
+    Cursor.tsx            # Trailing cursor dot
+    Navbar.tsx            # Fixed nav (home)
+    Reveal.tsx            # Scroll-reveal wrapper
+    ScreenshotCarousel.tsx # Screenshot gallery
   sections/
-    Hero.tsx       # Hero with glitch name, stats, CTAs
-    Experience.tsx # Work history with metrics
-    Projects.tsx   # Live project cards
-    Skills.tsx     # Tech stack grid
-    Contact.tsx    # Contact + footer
+    Hero.tsx        # Badge, name, bio, CTAs, photo, stats
+    Experience.tsx  # Work history cards
+    Projects.tsx    # Live project cards with galleries
+    Skills.tsx      # Tech stack grid
+    Contact.tsx     # CTA + social links
 
 lib/
   data.ts          # ALL CONTENT — edit this to update the site
   utils.ts         # cn() utility
+
+public/
+  photos/          # Profile photo
+  screenshots/     # Project screenshots (per-project folders)
+  skills/          # Skill icon SVGs
+  resumes/         # Resume PDF
 ```
+
+## Deploy to Vercel
+
+Vercel is connected to this GitHub repo — push to `main` and Vercel redeploys
+automatically. Do not deploy with `vercel --prod` from a local folder (that
+causes the GitHub and Vercel copies to drift apart).
+
+Point your domain DNS (Vercel dashboard → Settings → Domains → `maitrish.com`):
+- A record: `76.76.21.21`
+- CNAME www: `cname.vercel-dns.com`
