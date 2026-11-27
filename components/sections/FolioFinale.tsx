@@ -13,11 +13,10 @@ export default function FolioFinale() {
         </div>
         <img
           className="folio-personal__mark"
-          src="/mark.svg"
-          alt=""
+          src={site.photo}
+          alt={site.name}
           width={445}
-          height={437}
-          aria-hidden="true"
+          height={445}
         />
       </section>
       <section className="folio-contact" id="contact" aria-labelledby="folio-contact-title">

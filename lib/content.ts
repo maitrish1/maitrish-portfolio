@@ -13,6 +13,7 @@ export const site = {
   phone: '+919900177356',
   phoneHref: 'tel:+919900177356',
   location: 'Bengaluru, India',
+  photo: '/photos/IMG_4843.jpg',
   linkedin: 'https://linkedin.com/in/maitrish',
   github: 'https://github.com/maitrish1',
   devto: 'https://dev.to/maitrish',
@@ -55,51 +56,67 @@ export type RailProject = {
   slug: string
   title: string
   thesis: string
-  symbol: string
+  image: string
 }
 
+// The first six are real projects. The last two are AI placeholders added so
+// the rail and the pane have enough content to scroll. Replace them later.
 export const railProjects: RailProject[] = [
   {
     number: '01',
     slug: 'chqme',
     title: 'CheckMe Web Platform',
     thesis: 'Discovery, booking and payments for expert-led product demos.',
-    symbol: 'cache',
+    image: '/screenshots/chqme/1.png',
   },
   {
     number: '02',
     slug: 'experienceos',
     title: 'ExperienceOS',
     thesis: 'Demo pipeline, installation tracking and brand analytics.',
-    symbol: 'diagnostic',
+    image: '/screenshots/experienceos/1.png',
   },
   {
     number: '03',
     slug: 'booking',
     title: 'Booking Platform',
     thesis: 'From product discovery to confirmed demo booking.',
-    symbol: 'incident',
+    image: '/screenshots/booking/1.png',
   },
   {
     number: '04',
     slug: 'ops',
     title: 'Operations Dashboard',
     thesis: 'Leads, attendance and role-based access for internal teams.',
-    symbol: 'audio',
+    image: '/screenshots/ops/1.png',
   },
   {
     number: '05',
     slug: 'experience-portal',
     title: 'Experience Portal',
     thesis: 'Live WebRTC demo rooms for 6,000+ virtual sessions.',
-    symbol: 'fire',
+    image: '/screenshots/experience-chqme/1.png',
   },
   {
     number: '06',
     slug: 'quizrr',
     title: 'Quizrr by MathonGo',
     thesis: 'Test taking and analysis for 2.5M JEE and NEET students.',
-    symbol: 'voice',
+    image: '/screenshots/quizrr/1.png',
+  },
+  {
+    number: '07',
+    slug: 'ai-agent',
+    title: 'AI Research Agent',
+    thesis: 'Placeholder: an agent that reviews research drafts.',
+    image: '/placeholders/ai-agent.svg',
+  },
+  {
+    number: '08',
+    slug: 'ai-eval',
+    title: 'Prompt Eval Harness',
+    thesis: 'Placeholder: scores agent outputs against a baseline.',
+    image: '/placeholders/ai-eval.svg',
   },
 ]
 
@@ -219,7 +236,7 @@ export type ProjectCase = {
   screenshots: string[]
 }
 
-export const projectCases: ProjectCase[] = projects.map((p) => {
+const realCases: ProjectCase[] = projects.map((p) => {
   const dir = p.screenshotDir
   const count = screenshotCounts[dir] ?? 0
   return {
@@ -235,6 +252,39 @@ export const projectCases: ProjectCase[] = projects.map((p) => {
     screenshots: Array.from({ length: count }, (_, i) => `${dir}/${i + 1}.png`),
   }
 })
+
+// Placeholder AI projects. Not real work; they exist to fill the rail and the
+// bottom of the page until the real case studies are written.
+const placeholderCases: ProjectCase[] = [
+  {
+    slug: 'ai-agent',
+    name: 'AI Research Agent',
+    subtitle: 'Placeholder project',
+    description:
+      'Placeholder for an AI project. Replace this copy and the images when the real work is ready.',
+    stack: ['AI', 'Agents', 'Placeholder'],
+    url: 'https://maitrish.com',
+    visitLabel: 'maitrish.com',
+    screenshotDir: '/placeholders',
+    screenshotCount: 1,
+    screenshots: ['/placeholders/ai-agent.svg'],
+  },
+  {
+    slug: 'ai-eval',
+    name: 'Prompt Eval Harness',
+    subtitle: 'Placeholder project',
+    description:
+      'Placeholder for an AI project. Replace this copy and the images when the real work is ready.',
+    stack: ['AI', 'Evaluation', 'Placeholder'],
+    url: 'https://maitrish.com',
+    visitLabel: 'maitrish.com',
+    screenshotDir: '/placeholders',
+    screenshotCount: 1,
+    screenshots: ['/placeholders/ai-eval.svg'],
+  },
+]
+
+export const projectCases: ProjectCase[] = [...realCases, ...placeholderCases]
 
 // The live site itself returns 404 for these skill SVGs. Never request them.
 export const missingSkillIcons = new Set([
@@ -263,5 +313,4 @@ export const footer = {
   availability: site.availability,
 } as const
 
-// Keep a reference so the resume link stays tied to the verified data module.
 export const resumeDownloadName = personal.resumeDownloadName

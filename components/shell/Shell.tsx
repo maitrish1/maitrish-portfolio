@@ -30,25 +30,6 @@ export function ArrowUpRight({ size = 15, className = '', strokeWidth = 1.5 }: {
   )
 }
 
-function RailSymbol({ kind }: { kind: string }) {
-  const common = {
-    viewBox: '0 0 64 64',
-    width: 64,
-    height: 64,
-    fill: 'none',
-    xmlns: 'http://www.w3.org/2000/svg',
-    'aria-hidden': true as const,
-    focusable: 'false' as const,
-  }
-  return (
-    <svg {...common} className={`rail-symbol rail-symbol--${kind}`}>
-      <rect x="8" y="8" width="48" height="48" rx="8" stroke="currentColor" strokeWidth="1.5" opacity=".45" />
-      <path d="M16 40h10l8-18 8 18h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="44" cy="20" r="4" fill="currentColor" />
-    </svg>
-  )
-}
-
 const reduceMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -166,6 +147,7 @@ export default function Shell({ children }: { children: ReactNode }) {
             </Link>
           </div>
           <div className="rail-masthead__identity">
+            <img className="rail-masthead__photo" src={site.photo} alt={site.name} />
             <div className="rail-masthead__name">
               <span>{site.firstName}</span>
               <span className="rail-masthead__surname-line">
@@ -196,7 +178,7 @@ export default function Shell({ children }: { children: ReactNode }) {
                   href={`/project/${project.slug}`}
                 >
                   <span className="project-index__thumb">
-                    <RailSymbol kind={project.symbol} />
+                    <img className="project-index__image" src={project.image} alt="" loading="lazy" />
                   </span>
                   <span className="project-index__copy">
                     <span className="project-index__title">{project.title}</span>

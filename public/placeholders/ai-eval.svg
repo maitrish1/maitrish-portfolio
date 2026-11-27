@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" width="1200" height="750">
+  <rect width="1200" height="750" fill="#151515"/>
+  <rect x="40" y="40" width="1120" height="670" fill="none" stroke="#3c3c3c" stroke-width="2"/>
+  <g fill="#244bea">
+    <rect x="300" y="380" width="90" height="180"/>
+    <rect x="430" y="300" width="90" height="260"/>
+    <rect x="560" y="230" width="90" height="330"/>
+    <rect x="690" y="330" width="90" height="230"/>
+    <rect x="820" y="270" width="90" height="290"/>
+  </g>
+  <text x="600" y="140" fill="#f1f1ed" font-family="monospace" font-size="40" text-anchor="middle" letter-spacing="6">PROMPT EVAL HARNESS</text>
+  <text x="600" y="640" fill="#9d9d99" font-family="monospace" font-size="24" text-anchor="middle" letter-spacing="4">PLACEHOLDER</text>
+</svg>

@@ -343,6 +343,139 @@ body {
   }
 }
 
+/* Directed revision: rail identity, real rail images, flat section links. */
+.rail-masthead__photo {
+  display: block;
+  width: 72px;
+  height: 88px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+
+.rail-masthead__surname-line {
+  display: block;
+  margin-top: 10px;
+  white-space: normal;
+}
+
+.rail-masthead__role {
+  display: block;
+  max-width: 100%;
+  margin-top: 8px;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  line-height: 1.4;
+  white-space: normal;
+}
+
+.project-index__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top left;
+}
+
+.project-index__link--section {
+  grid-template-columns: minmax(0, 1fr) 16px;
+  min-height: 0;
+  padding: 12px 2px;
+  border-bottom: 1px solid var(--rail-edge);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.project-index__link--section .project-index__thumb,
+.project-index__link--section .project-index__thesis {
+  display: none;
+}
+
+/* Directed revision: experience, skills and contact stop being cards. */
+.folio-skills {
+  border-top: 0;
+}
+
+.folio-skills__grid {
+  display: block;
+  gap: 0;
+  border: 0;
+  background: none;
+}
+
+.folio-skills__group {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--folio-rule);
+  background: none;
+}
+
+.folio-skills__items {
+  gap: 8px 18px;
+}
+
+.folio-skills__item {
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.folio-job {
+  padding: 17px 0;
+  border-bottom: 1px solid var(--folio-rule);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.folio-education {
+  border-top: 1px solid var(--folio-rule);
+  border-radius: 0;
+  background: none;
+}
+
+.folio-contact {
+  border-top: 1px solid #ffffff65;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.folio-contact__links a {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.folio-subpage__list {
+  display: block;
+  gap: 0;
+  border: 0;
+  background: none;
+}
+
+.folio-subpage__item {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--folio-rule);
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.folio-subpage__item:hover {
+  background: none;
+}
+
+.folio-personal__mark {
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 0;
+}
+
 /* Reduced motion. Reference CSS honours this; extensions must too. */
 @media (prefers-reduced-motion: reduce) {
   *,

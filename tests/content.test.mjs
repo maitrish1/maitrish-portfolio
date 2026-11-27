@@ -19,14 +19,22 @@ test('content module carries every decided value', () => {
   assert.doesNotMatch(c, /20K\+/)
 })
 
-test('rail has exactly six real projects, all with slugs and thesis lines', () => {
+test('rail has six real projects plus two AI placeholders, all with slugs and images', () => {
   const c = read('lib/content.ts')
   const block = c.slice(c.indexOf('export const railProjects'), c.indexOf('export type WritingPost'))
-  assert.equal((block.match(/slug: '/g) || []).length, 6)
-  assert.equal((block.match(/thesis: '/g) || []).length, 6)
-  for (const slug of ['chqme', 'experienceos', 'booking', 'ops', 'experience-portal', 'quizrr']) {
+  assert.equal((block.match(/slug: '/g) || []).length, 8)
+  assert.equal((block.match(/thesis: '/g) || []).length, 8)
+  assert.equal((block.match(/image: '/g) || []).length, 8)
+  for (const slug of ['chqme', 'experienceos', 'booking', 'ops', 'experience-portal', 'quizrr', 'ai-agent', 'ai-eval']) {
     assert.ok(block.includes(`slug: '${slug}'`), `missing slug ${slug}`)
   }
+  assert.ok(block.includes("title: 'AI Research Agent'"))
+  assert.ok(block.includes("title: 'Prompt Eval Harness'"))
+  for (const p of ['chqme/1.png', 'experienceos/1.png', 'booking/1.png', 'ops/1.png', 'experience-chqme/1.png', 'quizrr/1.png']) {
+    assert.ok(existsSync(join(root, 'public/screenshots', p)), `missing ${p}`)
+  }
+  assert.ok(existsSync(join(root, 'public/placeholders/ai-agent.svg')))
+  assert.ok(existsSync(join(root, 'public/placeholders/ai-eval.svg')))
 })
 
 test('all eight dev.to posts are present with working urls', () => {
@@ -99,4 +107,38 @@ test('skill groups cover 59 items', () => {
 test('resume asset is present', () => {
   assert.ok(existsSync(join(root, 'public/resumes/Maitrish_Mukherjee2July2026.pdf')))
   assert.ok(readdirSync(join(root, 'public/skills')).length >= 39)
+})
+
+test('photo is present and wired into the rail and the personal mark', () => {
+  assert.ok(existsSync(join(root, 'public/photos/IMG_4843.jpg')))
+  const content = read('lib/content.ts')
+  assert.match(content, /photo: '\/photos\/IMG_4843\.jpg'/)
+  assert.match(read('components/shell/Shell.tsx'), /rail-masthead__photo/)
+  assert.match(read('components/sections/FolioFinale.tsx'), /src=\{site\.photo\}/)
+})
+
+// Only the last occurrence of a selector counts: the revision block overrides
+// earlier base rules. A regex over the whole file can match a later rule's
+// declaration and pass even when the override is gone.
+const lastRule = (css, selector) => {
+  const at = css.lastIndexOf(selector + ' {')
+  assert.ok(at >= 0, `missing rule ${selector}`)
+  const end = css.indexOf('}', at)
+  return css.slice(at, end)
+}
+
+test('experience, skills and contact are flat rows, not cards', () => {
+  const css = read('app/globals.css')
+  assert.match(lastRule(css, '.folio-skills__grid'), /border: 0/)
+  assert.match(lastRule(css, '.folio-skills__group'), /background: none/)
+  assert.match(lastRule(css, '.folio-skills__item'), /border: 0/)
+  assert.match(lastRule(css, '.folio-job'), /border-radius: 0/)
+  assert.match(lastRule(css, '.folio-subpage__item'), /border-radius: 0/)
+  assert.match(lastRule(css, '.folio-contact__links a'), /border: 0/)
+})
+
+test('rail role wraps instead of overflowing', () => {
+  const css = read('app/globals.css')
+  assert.match(lastRule(css, '.rail-masthead__surname-line'), /white-space: normal/)
+  assert.match(lastRule(css, '.rail-masthead__role'), /overflow-wrap: anywhere/)
 })

@@ -35,8 +35,8 @@ The reference also ships 13 fully bespoke interactive project case studies. Your
 - **AC-1**: On a 1440 by 900 desktop viewport, `document.body.scrollHeight` equals the viewport height, the rail and the pane each have their own scroller, and the rail card stacking animation runs on scroll.
 - **AC-2**: On a 375 pixel viewport, the rail is replaced by a top bar and the page scrolls normally with no horizontal overflow.
 - **AC-3**: The home pane contains hero, experience, writing, skills, off the clock, contact, and footer sections, in that order, with the reference palette and type scale, and the blue finale behind the last two sections.
-- **AC-4**: The rail lists exactly 6 real projects plus anchors for Experience, Skills, and Contact. Every rail row links somewhere real.
-- **AC-5**: Six case study routes exist, one per real project, each showing that project's real screenshots. No simulated product interface and no invented project appears.
+- **AC-4**: The rail lists the real projects plus anchors for Experience, Skills, and Contact. Every rail row links somewhere real. Revision 1 adds two clearly labelled AI placeholder projects, so the rail has 8 rows.
+- **AC-5**: Case study routes exist for the real projects, each showing that project's real screenshots. No simulated product interface appears. Revision 1 adds two clearly labelled placeholder case studies using placeholder SVGs, so there are 8 routes.
 - **AC-6**: The `/projects` and `/experience` routes still exist and use the same visual language as the redesigned home.
 - **AC-7**: All 8 real dev.to posts appear in the writing carousel, including the post titled `Test`, each with a working link.
 - **AC-8**: The off the clock copy and the hero headline are generated from your resume and achievements. No dev.to biography text and no hobby claims appear.
@@ -255,6 +255,18 @@ The build must keep every route static, keep all content in `lib/content.ts`, an
 - [ ] Consider replacing the `Test` writing post with a newer article if you publish one.
 - [ ] Consider self hosting the fonts later if the Google Fonts request becomes a privacy or latency concern.
 - [ ] Add `nextjs-app-router-patterns` and `vercel-react-best-practices` conventions to the project context file if they are not already recorded there.
+
+## Revision 1 (directed by the user after approval)
+
+The user reviewed the preview and directed five changes. This section records them so the design does not drift silently. AC-4 and AC-5 above are updated to match. This delta required its own approval checkpoint; it was approved by the user through the question tool before the code was written. The original `Status: APPROVED` line remains in force.
+
+1. Experience, skills and contact stop being cards. All boxed panels, bordered grids, padded chips, backgrounds and corner radii in those three sections are removed. They become flat hairline rows, matching the reference's sharp aesthetic.
+2. Two AI placeholder projects are added: `AI Research Agent` and `Prompt Eval Harness`. They are not real work. They carry placeholder SVG images in `public/placeholders/`. They exist so the rail and the bottom of the document pane have enough content to overflow and scroll. Rail project count moves from 6 to 8, and case study routes from 6 to 8.
+3. Every rail project card gets a real image. The first six use the first real screenshot of that project from `public/screenshots/`. The two placeholders use their placeholder SVGs. The generic rail symbol SVGs are removed.
+4. The rail role `Full Stack Founding Engineer & Architect` overflowed the 364 pixel rail. The surname line now stacks and wraps, and the role wraps at 11 pixels with `overflow-wrap: anywhere`. No text is removed.
+5. The photo `public/photos/IMG_4843.jpg` is added in two appropriate places: a portrait in the rail masthead identity, and the personal mark in the off the clock section. The unused `public/mark.svg` monogram is removed.
+
+Everything else in the approved design stays. `main` and the live site remain untouched.
 
 ## What to revisit as it grows
 
