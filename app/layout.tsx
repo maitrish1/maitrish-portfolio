@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.website),
   title: `${site.name} | ${site.role}`,
   description:
-    'Full Stack Founding Engineer & Architect. First engineer at CheckMe Commerce, 10+ production frontends, 5 FastAPI microservices, 120+ APIs, 30,000+ customers. MCA @ IIT Patna.',
+    'Full Stack Founding Engineer & Architect. Founding engineer at CheckMe Commerce. 900+ APIs, 50K+ customers, and platforms behind SharkNinja, EcoFlow and Dreame. MCA @ IIT Patna.',
   keywords: [
     site.name, 'Full Stack Engineer', 'Founding Engineer', 'Full Stack Architect',
     'Next.js Developer', 'React Developer', 'TypeScript Developer', 'FastAPI',
@@ -21,14 +21,15 @@ export const metadata: Metadata = {
     type: 'website',
     title: `${site.name} | ${site.role}`,
     description:
-      'Full Stack Founding Engineer & Architect. First engineer at CheckMe Commerce. MCA @ IIT Patna.',
+      'Full Stack Founding Engineer & Architect. 900+ APIs, 50K+ customers, and platforms behind SharkNinja, EcoFlow and Dreame. MCA @ IIT Patna.',
     url: site.website,
     siteName: 'maitrish.com',
   },
   twitter: {
     card: 'summary',
     title: `${site.name} | ${site.role}`,
-    description: 'Full Stack Founding Engineer & Architect. MCA @ IIT Patna.',
+    description:
+      'Full Stack Founding Engineer & Architect. 900+ APIs, 50K+ customers, and platforms behind SharkNinja, EcoFlow and Dreame. MCA @ IIT Patna.',
   },
 }
 
@@ -79,11 +80,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
+          rel="preload"
+          href="/fonts/manrope-variable.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
         />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd }} />
       </head>

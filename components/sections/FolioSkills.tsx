@@ -7,18 +7,14 @@ export default function FolioSkills() {
         <h2>Built with.</h2>
         <span className="folio-skills__count">{skillCount} skills</span>
       </div>
-      <div className="folio-skills__grid">
+      <div className="folio-skills__grid" data-reveal-group>
         {skillGroups.map((group) => (
-          <div className="folio-skills__group" key={group.title}>
+          <div className="folio-skills__group" key={group.title} data-reveal>
             <h3>{group.title}</h3>
             <div className="folio-skills__items">
               {group.items.map((item) => (
                 <span className="folio-skills__item" key={item.label}>
-                  {item.missing ? (
-                    <span className="folio-skills__fallback" aria-hidden="true" />
-                  ) : (
-                    <img src={item.icon} alt="" width={13} height={13} />
-                  )}
+                  <img src={item.icon} alt="" width={13} height={13} loading="lazy" />
                   <span>{item.label}</span>
                 </span>
               ))}

@@ -27,11 +27,11 @@ export default function ExperiencePage() {
         <p className="folio-subpage__eyebrow">Career</p>
         <h1 className="folio-subpage__title">Experience.</h1>
 
-        <div className="folio-subpage__list">
+        <div className="folio-subpage__list" data-reveal-group>
           {jobs.map((job) => (
             <div
               key={`${job.company}-${job.period}`}
-              className="folio-subpage__item"
+              className="folio-subpage__item" data-reveal
             >
               <div>
                 <h2>{job.company}</h2>
@@ -44,7 +44,7 @@ export default function ExperiencePage() {
             </div>
           ))}
 
-          <div className="folio-subpage__item">
+          <div className="folio-subpage__item" data-reveal>
             <div>
               <h2>
                 {education.degree} — {education.school}
@@ -54,7 +54,7 @@ export default function ExperiencePage() {
             <span>{education.label}</span>
           </div>
 
-          <div className="folio-subpage__item">
+          <div className="folio-subpage__item" data-reveal>
             <div>
               <h2>{skillCount} skills</h2>
               <p>{skillGroups.map((group) => group.title).join(' · ')}</p>
@@ -62,7 +62,7 @@ export default function ExperiencePage() {
             <span>Skills</span>
           </div>
 
-          <a className="folio-subpage__item" href={site.resume}>
+          <a className="folio-subpage__item" data-reveal href={site.resume}>
             <div>
               <h2>Full résumé ↗</h2>
             </div>

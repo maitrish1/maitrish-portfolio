@@ -16,6 +16,7 @@ export default function FolioWriting() {
         role="region"
         aria-label="Writing. Scroll horizontally or use the arrow keys to explore."
         tabIndex={0}
+        data-reveal-group
       >
         {writingPosts.map((post) => (
           <a
@@ -24,6 +25,7 @@ export default function FolioWriting() {
             href={post.url}
             target="_blank"
             rel="noreferrer"
+            data-reveal
           >
             <div className="folio-publication__meta">
               <span className="folio-label">{post.kind}</span>

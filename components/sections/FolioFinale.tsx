@@ -4,7 +4,7 @@ import { offClockCopy, site } from '@/lib/content'
 export default function FolioFinale() {
   return (
     <div className="folio-finale">
-      <section className="folio-personal" id="off-clock" aria-labelledby="folio-personal-title">
+      <section className="folio-personal" id="off-clock" data-reveal aria-labelledby="folio-personal-title">
         <h2 id="folio-personal-title" tabIndex={-1}>
           Off the clock
         </h2>
@@ -19,7 +19,7 @@ export default function FolioFinale() {
           height={445}
         />
       </section>
-      <section className="folio-contact" id="contact" aria-labelledby="folio-contact-title">
+      <section className="folio-contact" id="contact" data-reveal aria-labelledby="folio-contact-title">
         <a className="folio-contact__main" href={`mailto:${site.email}`}>
           <h2 id="folio-contact-title" tabIndex={-1}>
             Let’s build.

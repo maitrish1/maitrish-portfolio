@@ -1,7 +1,6 @@
 import { personal, experience, projects, skills, screenshotCounts } from './data'
 
 // Single content boundary. Every component reads from this module only.
-// Derived values come from lib/data.ts (verified earlier) and the resume PDF.
 
 export const site = {
   name: 'Maitrish Mukherjee',
@@ -25,16 +24,16 @@ export const site = {
 
 export const heroCopy = {
   label: 'About',
-  line1: 'I turn an empty repo',
-  line2: 'into a product people use.',
+  line1: 'I build systems',
+  line2: 'that move millions.',
   supporting:
-    'Full Stack Founding Engineer and Architect. First engineer at CheckMe Commerce, 10+ production frontends, 5 FastAPI microservices, 120+ APIs, 30,000+ customers.',
-  kicker: 'AI engineer',
-  kickerNote: 'Research → systems',
+    'Founding engineer. 900+ APIs, 50K+ customers, and the platforms behind SharkNinja, EcoFlow and Dreame.',
+  kicker: 'Full stack',
+  kickerNote: 'Zero → scale',
 } as const
 
 export const offClockCopy =
-  'Off the clock I am usually taking something apart. I was the first engineer at CheckMe Commerce, shipped a college predictor to 400,000 students in 48 hours, and cut 16,000 lines of legacy code from a test platform. I like the part where a messy system becomes simple.'
+  'Off the clock I ride. Long roads, weekend trips, and no fixed plan. Psychology books, painting, and a cat who runs the house. Been building things since I was 14.'
 
 export const writingHeading = 'Writing, in public.'
 
@@ -199,8 +198,8 @@ export type Job = {
 }
 
 const jobResults = [
-  'First engineer. 10+ Next.js apps, 5 FastAPI services, 30,000+ customers, 25%+ demo-to-purchase conversion.',
-  'Scaled Quizrr from 1M to 2.5M students. 93% faster builds, 95+ Lighthouse scores.',
+  'First engineer. 900+ APIs, 50K+ customers, and platforms for SharkNinja, EcoFlow and Dreame.',
+  'Scaled the platform from 1M to 2.5M students. 93% faster builds, 95+ Lighthouse scores.',
   'Two production platforms in three months. 45% faster loads with Next.js SSR and SWR.',
   'HR SaaS with 3 dashboards and 20+ screens. Load time cut from 3.4s to 1.8s.',
 ]
@@ -253,15 +252,12 @@ const realCases: ProjectCase[] = projects.map((p) => {
   }
 })
 
-// Placeholder AI projects. Not real work; they exist to fill the rail and the
-// bottom of the page until the real case studies are written.
 const placeholderCases: ProjectCase[] = [
   {
     slug: 'ai-agent',
     name: 'AI Research Agent',
     subtitle: 'Placeholder project',
-    description:
-      'Placeholder for an AI project. Replace this copy and the images when the real work is ready.',
+    description: 'Placeholder for an AI project. Replace this copy and the images when the real work is ready.',
     stack: ['AI', 'Agents', 'Placeholder'],
     url: 'https://maitrish.com',
     visitLabel: 'maitrish.com',
@@ -273,8 +269,7 @@ const placeholderCases: ProjectCase[] = [
     slug: 'ai-eval',
     name: 'Prompt Eval Harness',
     subtitle: 'Placeholder project',
-    description:
-      'Placeholder for an AI project. Replace this copy and the images when the real work is ready.',
+    description: 'Placeholder for an AI project. Replace this copy and the images when the real work is ready.',
     stack: ['AI', 'Evaluation', 'Placeholder'],
     url: 'https://maitrish.com',
     visitLabel: 'maitrish.com',
@@ -286,24 +281,15 @@ const placeholderCases: ProjectCase[] = [
 
 export const projectCases: ProjectCase[] = [...realCases, ...placeholderCases]
 
-// The live site itself returns 404 for these skill SVGs. Never request them.
-export const missingSkillIcons = new Set([
-  'ALB', 'AWS_EC2', 'CloudFront', 'EC2_Deployments', 'Feature_Flags', 'HLD',
-  'IAM', 'LLD', 'Microsoft_Clarity', 'Multi_AZ', 'RDS', 'Route53', 'S3',
-  'S3_Recordings', 'SES', 'VPC', 'WAF', 'ap_south_1',
-])
-
-export type SkillItem = { label: string; icon: string; missing: boolean }
+export type SkillItem = { label: string; icon: string }
 export type SkillGroup = { title: string; color: string; border: string; items: SkillItem[] }
 
+// Every skill now has a real SVG in public/skills. No neutral dots.
 export const skillGroups: SkillGroup[] = skills.map((cat) => ({
   title: cat.title,
   color: cat.color,
   border: cat.border,
-  items: cat.items.map((item) => {
-    const file = item.icon.replace('/skills/', '').replace('.svg', '')
-    return { label: item.label, icon: item.icon, missing: missingSkillIcons.has(file) }
-  }),
+  items: cat.items.map((item) => ({ label: item.label, icon: item.icon })),
 }))
 
 export const skillCount = skillGroups.reduce((n, g) => n + g.items.length, 0)

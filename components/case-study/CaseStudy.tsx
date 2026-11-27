@@ -28,9 +28,9 @@ export default function CaseStudy({ project }: { project: ProjectCase }) {
         ))}
       </div>
 
-      <div className="case-study__shots">
+      <div className="case-study__shots" data-reveal-group>
         {project.screenshots.map((src, i) => (
-          <figure className="case-study__shot" key={src}>
+          <figure className="case-study__shot" data-reveal key={src}>
             <img
               src={src}
               alt={`${project.name} screenshot ${i + 1}`}

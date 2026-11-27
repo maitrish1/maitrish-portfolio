@@ -169,13 +169,14 @@ export default function Shell({ children }: { children: ReactNode }) {
 
         <div className="project-rail__viewport">
           <div className="project-rail__scroller" ref={scrollerRef}>
-            <nav className="project-index" aria-label="Selected projects">
+            <nav className="project-index" aria-label="Selected projects" data-reveal-group>
               {railProjects.map((project) => (
                 <Link
                   key={project.slug}
                   id={`project-${project.slug}`}
                   className="project-index__link"
                   href={`/project/${project.slug}`}
+                  data-reveal
                 >
                   <span className="project-index__thumb">
                     <img className="project-index__image" src={project.image} alt="" loading="lazy" />

@@ -21,13 +21,13 @@ export const personal = {
 export const hero = {
   bioLead: 'Founding Engineer building a ',
   bioHighlight: 'E-commerce platform from zero',
-  bioMiddle: ' - 10+ apps, 5 microservices, AWS infrastructure. Previously scaled ',
+  bioMiddle: ' - 900+ APIs, 5 microservices, AWS infrastructure. Previously scaled ',
   bioHighlight2: 'MathonGo from 1M to 2.5M students',
   bioTail: ". I don't ship features. I build and own product engineering end-to-end.",
 }
 
 export const stats = [
-  { value: '30K+', label: 'Customers Served', color: 'var(--coral)' },
+  { value: '50K+', label: 'Customers Served', color: 'var(--coral)' },
   { value: '2.5M', label: 'Students on Platform', color: 'var(--forest)' },
   { value: '400K', label: 'Users in 48hrs', color: 'var(--gold)' },
   { value: '4+', label: 'Years Building', color: 'var(--slate)' },
@@ -54,14 +54,14 @@ export const experience: ExperienceEntry[] = [
       { label: 'experienceos', url: 'https://experienceos.chqme.com' },
     ],
     metrics: [
-      { value: '20K+', label: 'Customers', color: 'var(--coral)' },
+      { value: '50K+', label: 'Customers', color: 'var(--coral)' },
       { value: '6,000+', label: 'Virtual Demos', color: 'var(--forest)' },
       { value: '3,000+', label: 'Physical Demos', color: 'var(--coral)' },
       { value: '25%+', label: 'Conversion Rate', color: 'var(--forest)' },
     ],
     bullets: [
-      'React.js Frontend: Architects <strong class="hl-num">10</strong>+ Next.js (<strong class="hl-num">14</strong>–<strong class="hl-num">16</strong>) production frontends solo, consumer booking, admin console, & partner portal,using Next.js microfrontends, Shadcn/ui, Redux, TailwindCSS, TypeScript, serving <strong class="hl-num">30,000</strong>+ customers at <strong class="hl-num">25</strong>%+ demo-to-purchase conversion.',
-      'Node.js & Python Backend & REST API Design: Engineers <strong class="hl-num">5</strong> FastAPI microservices along with <strong class="hl-num">120</strong>+ RESTful APIs with SQLAlchemy covering demos, CRM, partner ops, & admin,with <strong class="hl-brand">ZegoCloud</strong> & LiveKit <strong class="hl-brand">WebRTC</strong> integration, <strong class="hl-brand">Razorpay</strong> payment pipelines, & multi-channel notifications (SMS, WhatsApp, SES email).',
+      'React.js Frontend: Architects <strong class="hl-num">10</strong>+ Next.js (<strong class="hl-num">14</strong>–<strong class="hl-num">16</strong>) production frontends solo, consumer booking, admin console, & partner portal,using Next.js microfrontends, Shadcn/ui, Redux, TailwindCSS, TypeScript, serving <strong class="hl-num">50,000</strong>+ customers at <strong class="hl-num">25</strong>%+ demo-to-purchase conversion.',
+      'Node.js & Python Backend & REST API Design: Engineers <strong class="hl-num">5</strong> FastAPI microservices along with <strong class="hl-num">900</strong>+ RESTful APIs with SQLAlchemy covering demos, CRM, partner ops, & admin,with <strong class="hl-brand">ZegoCloud</strong> & LiveKit <strong class="hl-brand">WebRTC</strong> integration, <strong class="hl-brand">Razorpay</strong> payment pipelines, & multi-channel notifications (SMS, WhatsApp, SES email).',
       'SQL & NoSQL Database Design: Manages & designs <strong class="hl-num">60</strong>+ table PostgreSQL schema on Multi-AZ RDS covering <strong class="hl-num">7</strong> order types, multi-stage status tracking, RBAC across <strong class="hl-num">9</strong> role types, OTP auth, <strong class="hl-brand">Razorpay</strong> payment verification, & multi-tenant SaaS mode via feature flags.',
       'AWS Cloud Infrastructure: Owns AWS production infra in ap-south-<strong class="hl-num">1</strong>, ALB routing across <strong class="hl-num">5</strong> services, WAF with DDoS/XSS/SQLi rules, Multi-AZ RDS, EC2 for servers, S3 for recordings & exports, & Route53 DNS.',
     ],

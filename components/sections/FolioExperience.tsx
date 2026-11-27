@@ -20,9 +20,9 @@ export default function FolioExperience() {
           </Link>
         </span>
       </div>
-      <div className="folio-jobs">
+      <div className="folio-jobs" data-reveal-group>
         {jobs.map((job) => (
-          <article className="folio-job" key={`${job.company}-${job.period}`}>
+          <article className="folio-job" key={`${job.company}-${job.period}`} data-reveal>
             <div className="folio-job__meta">
               <p className="folio-job__company">{job.company}</p>
               <time>{job.period}</time>
@@ -32,7 +32,7 @@ export default function FolioExperience() {
           </article>
         ))}
       </div>
-      <div className="folio-education">
+      <div className="folio-education" data-reveal>
         <span className="folio-label">Education</span>
         <p>
           <strong>{education.degree}</strong>

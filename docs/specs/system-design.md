@@ -39,10 +39,10 @@ The reference also ships 13 fully bespoke interactive project case studies. Your
 - **AC-5**: Case study routes exist for the real projects, each showing that project's real screenshots. No simulated product interface appears. Revision 1 adds two clearly labelled placeholder case studies using placeholder SVGs, so there are 8 routes.
 - **AC-6**: The `/projects` and `/experience` routes still exist and use the same visual language as the redesigned home.
 - **AC-7**: All 8 real dev.to posts appear in the writing carousel, including the post titled `Test`, each with a working link.
-- **AC-8**: The off the clock copy and the hero headline are generated from your resume and achievements. No dev.to biography text and no hobby claims appear.
+- **AC-8**: The hero headline is big and encompassing. The off the clock copy covers hobbies, riding and trips. Superseded by Revision 2.
 - **AC-9**: Credentials read `MCA @ IIT Patna` everywhere. The resume's `BCA, Acharya Institute of Graduate Studies` is not used. Phone `+919900177356` is shown. Live site numbers win, and the internal `20K+` figure is normalized to `30K+`.
-- **AC-10**: Manrope and IBM Plex Mono load from the Google Fonts CDN. Archivo is not used on the home page.
-- **AC-11**: All 59 skill items render. The 18 skill SVGs that do not exist use a neutral fallback, not a broken image.
+- **AC-10**: Manrope and IBM Plex Mono are self hosted as local woff2 files. Archivo is not used on the home page. No external font request is made.
+- **AC-11**: All 59 skill items render with a real SVG icon. Superseded by Revision 2, which adds the missing files and removes the neutral fallback.
 - **AC-12**: All 54 screenshots render as plain `img` elements with React 19 automatic preloads. No Next image optimizer URLs appear.
 - **AC-13**: No custom cursor, no PostHog, and no Microsoft Clarity script ship. A later round replaced the earlier Clarity choice with `Skip Clarity`.
 - **AC-14**: Each route has its own title, description, canonical URL, OpenGraph and Twitter tags, theme color `#151513`, and a JSON LD `Person` graph. No `og:image` tag appears, matching the reference.
@@ -135,7 +135,7 @@ Browser (1440 x 900 desktop)
   |           +-- Hero.tsx                        #about_intro
   |           +-- ExperienceList.tsx              #experience, 4 roles + education
   |           +-- WritingCarousel.tsx             #publications, 8 posts, snap
-  |           +-- SkillsGrid.tsx                 59 items, neutral fallback
+  |           +-- SkillsGrid.tsx                 59 items, real SVG icons
   |           +-- Finale.tsx                     blue #244bea wrapper
   |           |     +-- OffClock.tsx             #off-clock
   |           |     +-- Contact.tsx              #contact
@@ -170,7 +170,7 @@ Browser (1440 x 900 desktop)
 - All routes prerender as static. No route reads a request.
 - Content comes only from `lib/content.ts`. No component embeds resume text or a project name as a literal.
 - Every internal link resolves to a built route or an existing section id.
-- No external runtime call except the Google Fonts stylesheet and its font files.
+- No external runtime call. Fonts, icons and images are all local static assets.
 - The 18 missing skill SVGs never produce a network request for a missing file.
 
 **Security model**: the site is public and read only. There is no authentication, no user input, no form, and no server side mutation. No compliance scope applies. No secret is stored in source. Browser check must confirm no third party script runs.
@@ -200,7 +200,7 @@ There is no runtime API. This section records the route contract so the build do
 | Language | TypeScript, strict | Matches the existing repo and the profile. |
 | Framework | Next.js 15.5.29 App Router | Static output, per route metadata, existing Vercel wiring. |
 | Styling | Tailwind plus `app/reference.css` | Tailwind for utilities, plain CSS for `cqi`, container queries, hairlines, and pane scrollers. |
-| Fonts | Google Fonts CDN, Manrope and IBM Plex Mono | Matches the rendered reference. |
+| Fonts | Self hosted woff2: Manrope variable 400 to 800, IBM Plex Mono 400 and 500 | Same faces as the reference, with no third party runtime request. |
 | Primary DB | none | Content is static. |
 | Auth | none | Public site. |
 | Background jobs | none | Nothing to process. |
@@ -210,7 +210,7 @@ There is no runtime API. This section records the route contract so the build do
 
 ## Scale and reliability
 
-Traffic is a personal portfolio, so the scale target is small and read only. Every page is prerendered static HTML served from a CDN. There is no server process, no database connection, and no runtime dependency to fail. Vercel rebuilds on push. Failure modes are limited to a missing asset or a font CDN outage: missing skill SVGs are handled by a neutral fallback, screenshot paths are verified against `public/`, and a font failure falls back to a system stack. Recovery is a redeploy or a revert of the branch. No multi region design, no queue, and no cache layer is warranted. Monitoring is intentionally absent; the deterministic gate, the browser check, and the cross family review are the checks before approval.
+Traffic is a personal portfolio, so the scale target is small and read only. Every page is prerendered static HTML served from a CDN. There is no server process, no database connection, and no runtime dependency to fail. Vercel rebuilds on push. Failure modes are limited to a missing asset: every icon and screenshot path is checked against `public/`, and a missing font falls back to the system stack. Recovery is a redeploy or a revert of the branch. No multi region design, no queue, and no cache layer is warranted. Monitoring is intentionally absent; the deterministic gate, the browser check, and the cross family review are the checks before approval.
 
 ## Trade-offs
 
@@ -226,7 +226,6 @@ Traffic is a personal portfolio, so the scale target is small and read only. Eve
 - Eight writing cards include a `Test` stub, which you explicitly chose. It is real content but low quality.
 - No analytics means you get no visitor data. That was your choice.
 - No `og:image` means social previews show no image, matching the reference gap.
-- Google Fonts is a third party runtime request. A font CDN failure changes typography.
 
 **Neutral**:
 - `lib/data.ts` is replaced by `lib/content.ts` as the single content module. The old module is not deleted until the redesign is approved and verified.
@@ -253,7 +252,6 @@ The build must keep every route static, keep all content in `lib/content.ts`, an
 - [ ] After approval, decide whether to promote `redesign` to `main` or merge it, and confirm the Vercel preview URL matches `maitrish.com` content.
 - [ ] Consider adding a branded `og:image` later. The reference has none, so this is out of scope now.
 - [ ] Consider replacing the `Test` writing post with a newer article if you publish one.
-- [ ] Consider self hosting the fonts later if the Google Fonts request becomes a privacy or latency concern.
 - [ ] Add `nextjs-app-router-patterns` and `vercel-react-best-practices` conventions to the project context file if they are not already recorded there.
 
 ## Revision 1 (directed by the user after approval)
@@ -267,6 +265,20 @@ The user reviewed the preview and directed five changes. This section records th
 5. The photo `public/photos/IMG_4843.jpg` is added in two appropriate places: a portrait in the rail masthead identity, and the personal mark in the off the clock section. The unused `public/mark.svg` monogram is removed.
 
 Everything else in the approved design stays. `main` and the live site remain untouched.
+
+## Revision 2 (directed by the user after preview review)
+
+Seven further changes. AC-8, AC-9 and AC-11 below are superseded by this revision. The `Status: APPROVED` line stays in force, and the delta was approved by the user through the question tool.
+
+1. Every skill chip uses a real SVG icon. All 57 icon files now exist in `public/skills/`. The 18 that previously returned 404 were fetched as real brand icons (simple-icons for AWS services) or real Lucide glyphs. The neutral fallback dot and `missingSkillIcons` are removed.
+2. Animations: an IntersectionObserver reveal engine with per-group stagger, hover transitions on rail cards, publication cards, skill chips, contact links and case study shots, image zoom, and the reference's own hero title clip-path entrance and rAF rail deck. Reduced motion disables reveals and scroll snapping. No-JS still shows all content.
+3. Hero copy is bigger and less granular: `I build systems / that move millions.` Supporting copy is one line instead of a list of subsystems.
+4. Off the clock copy covers hobbies, riding and trips: `Off the clock I ride. Long roads, weekend trips, and no fixed plan. Psychology books, painting, and a cat who runs the house. Been building things since I was 14.`
+5. Numbers are corrected: `900+` APIs (was 120+), `50K+` customers (was 30K+/20K+), and clients SharkNinja, EcoFlow and Dreame are named. `lib/data.ts` is updated too so the experience bullets agree.
+6. Copy is less granular and more encompassing across the hero and job results. Long enumerations of subsystems are replaced with short statements.
+7. Fonts are self hosted. The Google Fonts link failed DNS in this environment, so Manrope (confirmed variable, 400 to 800) and IBM Plex Mono 400 and 500 are served from `public/fonts/`. AC-10, the stack table, the data flow and the failure mode notes above are updated. No third party runtime request remains.
+
+**AC-9 superseded**: credentials still read `MCA @ IIT Patna`, phone `+919900177356` is shown, but the number set is now `900+ APIs` and `50K+ customers`. The earlier `20K+ → 30K+` normalization no longer applies.
 
 ## What to revisit as it grows
 

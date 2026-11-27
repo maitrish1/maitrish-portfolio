@@ -11,8 +11,8 @@ test('content module carries every decided value', () => {
   assert.match(c, /MCA @ IIT Patna/)
   assert.match(c, /\+919900177356/)
   assert.match(c, /maitrishmukherjeee@gmail\.com/)
-  assert.match(c, /I turn an empty repo/)
-  assert.match(c, /Off the clock I am usually taking something apart/)
+  assert.match(c, /I build systems/)
+  assert.match(c, /Off the clock I ride/)
   assert.match(c, /Writing, in public\./)
   assert.doesNotMatch(c, /Acharya Institute/)
   assert.doesNotMatch(c, /3\.3 years/)
@@ -61,12 +61,61 @@ test('every referenced screenshot exists on disk', () => {
   assert.equal(total, 54, 'expected 54 screenshots')
 })
 
-test('missing skill icons are never referenced as img src', () => {
+test('every skill has a real SVG icon and no neutral fallback', () => {
+  const data = read('lib/data.ts')
+  const skillsBlock = data.slice(data.indexOf('export const skills: SkillCategory[]'))
+  const refs = [...new Set([...skillsBlock.matchAll(/icon: '(\/skills\/[^']+)'/g)].map((m) => m[1]))]
+  assert.equal(refs.length, 57, `expected 57 distinct icon files, got ${refs.length}`)
+  for (const ref of refs) {
+    assert.ok(existsSync(join(root, 'public', ref)), `missing icon ${ref}`)
+    const svg = readFileSync(join(root, 'public', ref), 'utf8')
+    assert.match(svg, /<svg/, `${ref} is not an SVG`)
+  }
+  assert.doesNotMatch(read('lib/content.ts'), /missingSkillIcons|fallback/)
+  assert.doesNotMatch(read('components/sections/FolioSkills.tsx'), /missing|fallback/)
+})
+
+test('animations: CSS scroll reveals, stagger, hover, reduced motion', () => {
+  const css = read('app/globals.css')
+  // Pure CSS scroll-driven animation: no JS gating, no hydration dependency.
+  assert.match(css, /@keyframes folio-reveal-in/)
+  assert.match(css, /animation-timeline: view\(\)/)
+  assert.match(css, /animation-range: entry/)
+  assert.match(css, /@supports \(animation-timeline: view\(\)\)/)
+  assert.match(css, /:not\(\.project-index__link\)/)
+  assert.match(css, /var\(--reveal-delay, 0ms\)/)
+  assert.match(css, /\[data-reveal-group\] > \[data-reveal\]:nth-child\(2\)/)
+  assert.match(css, /translate: 0 26px/)
+  assert.match(css, /\.project-index__link:hover \.project-index__image/)
+  assert.match(css, /background-color 0\.35s/)
+  assert.match(css, /scroll-snap-type: none/)
+  assert.match(css, /@media print/)
+  assert.match(css, /@keyframes folio-reveal-in-mobile/)
+  // No JS reveal class gating anywhere.
+  assert.doesNotMatch(css, /\.js-ready|reveal-failsafe|is-visible|will-change/)
+  const layout = read('app/layout.tsx')
+  assert.doesNotMatch(layout, /js-ready|reveal-failsafe|suppressHydrationWarning|<noscript>/)
+  assert.doesNotMatch(read('components/shell/Shell.tsx'), /ScrollReveal/)
+  assert.equal(existsSync(join(root, 'components/shell/ScrollReveal.tsx')), false)
+  for (const f of ['components/sections/FolioSkills.tsx', 'components/sections/FolioWriting.tsx',
+    'components/sections/FolioExperience.tsx', 'components/case-study/CaseStudy.tsx',
+    'components/shell/Shell.tsx']) {
+    assert.match(read(f), /data-reveal/, `${f} missing reveal hooks`)
+  }
+})
+
+test('directed copy: bigger hero, hobbies, updated numbers', () => {
   const c = read('lib/content.ts')
-  assert.match(c, /missingSkillIcons/)
-  assert.match(c, /missingSkillIcons\.has\(file\)/)
-  const fallback = read('app/globals.css')
-  assert.match(fallback, /folio-skills__fallback/)
+  assert.match(c, /I build systems/)
+  assert.match(c, /that move millions\./)
+  assert.match(c, /900\+ APIs, 50K\+ customers/)
+  assert.match(c, /SharkNinja, EcoFlow and Dreame/)
+  assert.match(c, /Off the clock I ride/)
+  assert.match(c, /Long roads, weekend trips/)
+  assert.match(c, /Psychology books, painting/)
+  assert.doesNotMatch(c, /empty repo|I am usually taking something apart/)
+  const data = read('lib/data.ts')
+  assert.doesNotMatch(data, /120\+|30,000|30K\+|20K\+/)
 })
 
 test('no analytics, no image optimizer, no custom cursor', () => {
@@ -76,10 +125,25 @@ test('no analytics, no image optimizer, no custom cursor', () => {
   }
   const layout = read('app/layout.tsx')
   assert.doesNotMatch(layout, /Cursor/)
-  assert.match(layout, /Manrope/)
-  assert.match(layout, /IBM\+Plex\+Mono/)
   assert.match(layout, /themeColor: '#151513'/)
   assert.doesNotMatch(layout, /openGraph: \{[\s\S]*?images:/)
+  assert.doesNotMatch(layout, /fonts\.googleapis\.com/)
+  assert.doesNotMatch(layout, /120\+|30,000|30K\+|20K\+/)
+  assert.equal((layout.match(/900\+ APIs, 50K\+ customers/g) || []).length, 3,
+    'page, openGraph and twitter descriptions must all use the new copy')
+})
+
+test('fonts are self-hosted, no external runtime requests', () => {
+  const css = read('app/globals.css')
+  assert.match(css, /@font-face/)
+  assert.match(css, /font-family: 'Manrope'/)
+  assert.match(css, /font-family: 'IBM Plex Mono'/)
+  assert.match(read('app/globals.css'), /font-weight: 400 800/)
+  for (const f of ['manrope-variable.woff2', 'ibm-plex-mono-400.woff2', 'ibm-plex-mono-500.woff2']) {
+    const p = join(root, 'public/fonts', f)
+    assert.ok(existsSync(p), `missing ${f}`)
+    assert.ok(readFileSync(p).slice(0, 4).toString() === 'wOF2', `${f} is not woff2`)
+  }
 })
 
 test('reference CSS and extension CSS are both present', () => {
@@ -127,14 +191,35 @@ const lastRule = (css, selector) => {
   return css.slice(at, end)
 }
 
+// A selector may have a base rule plus later hover/transition rules. Gather
+// every body and check the flattening declaration is present in at least one.
+const allRules = (css, selector) => {
+  const bodies = []
+  let from = 0
+  while (true) {
+    const at = css.indexOf(selector + ' {', from)
+    if (at < 0) break
+    const end = css.indexOf('}', at)
+    bodies.push(css.slice(at, end))
+    from = end + 1
+  }
+  assert.ok(bodies.length > 0, `missing rule ${selector}`)
+  return bodies.join('\n')
+}
+
 test('experience, skills and contact are flat rows, not cards', () => {
   const css = read('app/globals.css')
-  assert.match(lastRule(css, '.folio-skills__grid'), /border: 0/)
-  assert.match(lastRule(css, '.folio-skills__group'), /background: none/)
-  assert.match(lastRule(css, '.folio-skills__item'), /border: 0/)
-  assert.match(lastRule(css, '.folio-job'), /border-radius: 0/)
-  assert.match(lastRule(css, '.folio-subpage__item'), /border-radius: 0/)
-  assert.match(lastRule(css, '.folio-contact__links a'), /border: 0/)
+  assert.match(allRules(css, '.folio-skills__grid'), /border: 0/)
+  assert.match(allRules(css, '.folio-skills__group'), /background: none/)
+  assert.match(allRules(css, '.folio-skills__item'), /border: 0/)
+  assert.match(allRules(css, '.folio-job'), /border-radius: 0/)
+  assert.match(allRules(css, '.folio-subpage__item'), /border-radius: 0/)
+  assert.match(allRules(css, '.folio-contact__links a'), /border: 0/)
+  for (const sel of ['.folio-skills__grid', '.folio-skills__group', '.folio-skills__item',
+    '.folio-job', '.folio-subpage__list', '.folio-subpage__item', '.folio-contact__links a']) {
+    assert.doesNotMatch(lastRule(css, sel), /border-radius: [1-9]|border: 1px|box-shadow: 0 [1-9]/,
+      `${sel} reintroduces card styling`)
+  }
 })
 
 test('rail role wraps instead of overflowing', () => {

@@ -3,7 +3,7 @@ import { heroCopy } from '@/lib/content'
 
 export default function FolioHero() {
   return (
-    <section className="folio-hero" aria-labelledby="folio-title">
+    <section className="folio-hero" aria-labelledby="folio-title" data-reveal>
       <header className="folio-topline">
         <span className="folio-label">{heroCopy.label}</span>
         <nav aria-label="About page">

@@ -6,7 +6,7 @@ import { footer } from '@/lib/content'
 export default function FolioFooter() {
   return (
     <div className="folio-finale" style={{ paddingTop: 0 }}>
-      <footer className="folio-footer">
+      <footer className="folio-footer" data-reveal>
         <span>{footer.copyright}</span>
         <span>{footer.availability}</span>
       </footer>

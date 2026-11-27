@@ -28,11 +28,11 @@ export default function ProjectsPage() {
         <p className="folio-subpage__eyebrow">Selected work</p>
         <h1 className="folio-subpage__title">Projects.</h1>
 
-        <div className="folio-subpage__list">
+        <div className="folio-subpage__list" data-reveal-group>
           {projectCases.map((project, index) => (
             <Link
               key={project.slug}
-              className="folio-subpage__item"
+              className="folio-subpage__item" data-reveal
               href={`/project/${project.slug}`}
             >
               <div>
