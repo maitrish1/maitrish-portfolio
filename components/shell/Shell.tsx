@@ -34,49 +34,128 @@ const reduceMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
+const clamp = (value: number, low: number, high: number) =>
+  Math.min(Math.max(value, low), high)
+
+// Copied from the reference site's shipped deck hook. Card height is chosen so
+// a whole number of cards fills the rail viewport; cards below the fold are
+// compressed, lifted and faded so they stack behind the visible ones.
+function fitCardHeight(height: number): number {
+  let best = { cardHeight: 64, distance: Number.POSITIVE_INFINITY }
+  for (let n = 3; n <= 8; n += 1) {
+    const cardHeight = (height - 8 * (n - 1)) / (n + 0.5)
+    if (cardHeight < 64 || cardHeight > 95) continue
+    const distance = Math.abs(cardHeight - 72)
+    if (distance < best.distance) best = { cardHeight, distance }
+  }
+  if (!Number.isFinite(best.distance)) {
+    const n = clamp(Math.round((height + 8) / 80 - 0.5), 3, 8)
+    return clamp((height - 8 * (n - 1)) / (n + 0.5), 64, 95)
+  }
+  return best.cardHeight
+}
+
 export default function Shell({ children }: { children: ReactNode }) {
   const scrollerRef = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLElement>(null)
   const paneRef = useRef<HTMLElement>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  // Rail "deck": cards stack and compress as the rail scrolls.
+  // Rail "deck": cards fill the viewport, then stack behind one another.
   useEffect(() => {
-    const scroller = scrollerRef.current
-    if (!scroller || reduceMotion()) return
-    let frame = 0
-    const links = Array.from(scroller.querySelectorAll<HTMLElement>('.project-index__link'))
+    const viewport = scrollerRef.current // the scrolling element
+    const track = trackRef.current // the card container
+    if (!viewport || !track) return
+    const desktop = window.matchMedia('(min-width: 960px)')
+    let frame: number | null = null
+    let disposed = false
+    let cards: HTMLElement[] = []
+
+    const reset = (card: HTMLElement) => {
+      card.style.removeProperty('opacity')
+      card.style.removeProperty('pointer-events')
+      card.style.removeProperty('transform')
+      card.style.removeProperty('z-index')
+      delete card.dataset.depthLayer
+    }
 
     const paint = () => {
-      const top = scroller.scrollTop
-      const step = 84
-      links.forEach((link, i) => {
-        const depth = Math.max(0, top / step - i)
+      frame = null
+      if (!viewport.dataset.deckActive) return
+      const cardHeight = Number.parseFloat(track.style.getPropertyValue('--rail-card-height'))
+      const step = cardHeight + 8
+      const start = viewport.clientHeight - 1.5 * cardHeight
+      const range = 2.5 * step
+      cards.forEach((card, i) => {
+        const offset = card.offsetTop - viewport.scrollTop
+        const depth = clamp((offset - start) / range, 0, 1)
+        card.style.zIndex = String(cards.length - i)
         if (depth <= 0) {
-          link.style.transform = ''
-          link.style.opacity = ''
-        } else if (depth >= 2.4) {
-          link.style.transform = 'translateY(-159px) scale(.5)'
-          link.style.opacity = '0'
-        } else if (depth >= 1.4) {
-          link.style.transform = 'translateY(-127px) scale(.599)'
-          link.style.opacity = '.66'
-        } else {
-          link.style.transform = `translateY(-${Math.round(depth * 63)}px) scale(${1 - depth * 0.2})`
-          link.style.opacity = ''
+          reset(card)
+          card.style.zIndex = String(cards.length - i)
+          return
         }
+        const scale = 1 - 0.5 * depth
+        const lift = -2 * step * depth
+        const opacity = clamp((1 - depth) / 0.3, 0, 1)
+        card.dataset.depthLayer = 'true'
+        card.style.transform = `translateY(${lift}px) scale(${scale})`
+        card.style.opacity = String(opacity)
+        card.style.pointerEvents = opacity < 0.01 ? 'none' : 'auto'
       })
     }
-    const onScroll = () => {
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(paint)
+
+    const schedule = () => {
+      if (frame === null) frame = requestAnimationFrame(paint)
     }
-    scroller.setAttribute('data-deck-active', 'true')
-    scroller.addEventListener('scroll', onScroll, { passive: true })
-    paint()
+
+    const layout = () => {
+      frame = null
+      cards = Array.from(track.querySelectorAll<HTMLElement>('[data-project-id]'))
+      const disabled = !desktop.matches || cards.length < 2 || reduceMotion()
+      if (disabled) {
+        cards.forEach(reset)
+        track.style.removeProperty('--rail-card-gap')
+        track.style.removeProperty('--rail-card-height')
+        track.style.removeProperty('--rail-end-space')
+        delete viewport.dataset.deckActive
+        return
+      }
+      const cardHeight = fitCardHeight(viewport.clientHeight)
+      track.style.setProperty('--rail-card-gap', '8px')
+      track.style.setProperty('--rail-card-height', `${cardHeight}px`)
+      track.style.setProperty('--rail-end-space', `${0.5 * cardHeight}px`)
+      viewport.dataset.deckActive = 'true'
+      paint()
+    }
+
+    const relayout = () => {
+      if (frame !== null) cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(layout)
+    }
+
+    const observer = new ResizeObserver(relayout)
+    observer.observe(viewport)
+    desktop.addEventListener('change', relayout)
+    viewport.addEventListener('scroll', schedule, { passive: true })
+    if (document.fonts) {
+      document.fonts.ready.then(() => {
+        if (!disposed) relayout()
+      })
+    }
+    relayout()
+
     return () => {
-      scroller.removeEventListener('scroll', onScroll)
-      cancelAnimationFrame(frame)
-      scroller.removeAttribute('data-deck-active')
+      disposed = true
+      observer.disconnect()
+      desktop.removeEventListener('change', relayout)
+      viewport.removeEventListener('scroll', schedule)
+      if (frame !== null) cancelAnimationFrame(frame)
+      cards.forEach(reset)
+      track.style.removeProperty('--rail-card-gap')
+      track.style.removeProperty('--rail-card-height')
+      track.style.removeProperty('--rail-end-space')
+      delete viewport.dataset.deckActive
     }
   }, [])
 
@@ -169,14 +248,14 @@ export default function Shell({ children }: { children: ReactNode }) {
 
         <div className="project-rail__viewport">
           <div className="project-rail__scroller" ref={scrollerRef}>
-            <nav className="project-index" aria-label="Selected projects" data-reveal-group>
+            <nav className="project-index" aria-label="Selected projects" ref={trackRef}>
               {railProjects.map((project) => (
                 <Link
                   key={project.slug}
                   id={`project-${project.slug}`}
                   className="project-index__link"
                   href={`/project/${project.slug}`}
-                  data-reveal
+                  data-project-id={project.slug}
                 >
                   <span className="project-index__thumb">
                     <img className="project-index__image" src={project.image} alt="" loading="lazy" />
@@ -189,7 +268,12 @@ export default function Shell({ children }: { children: ReactNode }) {
                 </Link>
               ))}
               {sectionAnchors.map((anchor) => (
-                <Link key={anchor.href} className="project-index__link project-index__link--section" href={`/${anchor.href}`}>
+                <Link
+                  key={anchor.href}
+                  className="project-index__link project-index__link--section"
+                  href={`/${anchor.href}`}
+                  data-project-id={`section-${anchor.label.toLowerCase()}`}
+                >
                   <span className="project-index__thumb" aria-hidden="true" />
                   <span className="project-index__copy">
                     <span className="project-index__title">{anchor.label}</span>

@@ -280,6 +280,14 @@ Seven further changes. AC-8, AC-9 and AC-11 below are superseded by this revisio
 
 **AC-9 superseded**: credentials still read `MCA @ IIT Patna`, phone `+919900177356` is shown, but the number set is now `900+ APIs` and `50K+ customers`. The earlier `20K+ → 30K+` normalization no longer applies.
 
+## Revision 3 (directed by the user after preview review)
+
+Three further changes. The user asked to see the actual reference site, and a fresh 1280x800 capture succeeded (`docs/reference/desktop.png`, `meta.json`), so the deck was compared against the real rendered page, not guessed.
+
+1. **Rail deck** is copied from the reference site's shipped JavaScript, recovered from the captured bundle. Previously a crude approximation with a hardcoded 84px step. Now: `fitCardHeight` picks a card height so a whole number of cards fills the rail viewport (64–95px range, target 72px), sets `--rail-card-gap`, `--rail-card-height` and `--rail-end-space` on the track, and a `requestAnimationFrame` paint compresses, lifts and fades cards below the fold using `depth = clamp((offsetTop - scrollTop - start) / range, 0, 1)`, `scale(1 - .5c)`, `translateY(-2*step*c)`, `opacity = clamp((1-c)/.3, 0, 1)`, plus descending `z-index`. `ResizeObserver`, a `min-width: 960px` media query, `document.fonts.ready` and reduced-motion handling are included. Cards therefore occupy only the screen height and the ones below stack behind one another, exactly as on the reference.
+2. **Skill icons** were black on a black background. All 57 `public/skills/*.svg` files now carry an explicit light ink fill or stroke (`#f1f1ed`). Verified by sampling rendered pixels: luminance ~245, no broken images.
+3. **Experience detail drawer**: each of the four experience rows on `/experience` is now a button that opens a right-side dialog portalled to `document.body`. It uses `position: fixed`, so it overlaps the page from the right without shrinking the experience column (verified: page width unchanged at 1076px, drawer spans 880–1440 at a 1440px viewport). Content comes from `lib/experience-details.ts`, transcribed from the resume with the corrected 900+ APIs / 50K+ customers figures and the SharkNinja, EcoFlow, Dreame and Vivo clients. The dialog has `role="dialog"`, `aria-modal`, a focus trap, Escape and backdrop close, and a resume link.
+
 ## What to revisit as it grows
 
 If the portfolio grows past six projects, the rail needs pagination or grouping, and the fixed viewport desktop shell may hurt long content. If you add real interactive demos, revisit the decision to use only static pages. If you want visitor data, revisit analytics with a privacy review first. If the writing list grows, the horizontal scroll snap carousel may need a vertical archive route. If the team grows, split `app/reference.css` into per section files. None of these are needed on day one.

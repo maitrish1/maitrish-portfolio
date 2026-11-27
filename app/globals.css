@@ -287,6 +287,233 @@ body {
   }
 }
 
+/* Clickable experience rows open the detail drawer. They are buttons, so reset
+   the browser defaults while keeping the flat hairline row look. */
+.folio-subpage__item--action {
+  width: 100%;
+  border: 0;
+  border-bottom: 1px solid var(--folio-rule);
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.folio-subpage__item--action:hover h2 {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.folio-subpage__item--action:focus-visible {
+  outline: 2px solid var(--folio-blue);
+  outline-offset: 3px;
+}
+
+/* Right-side experience detail drawer. Fixed, so it overlaps the page instead
+   of shrinking it. Portalled to <body> in ExperienceDrawer.tsx. */
+.experience-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(6, 7, 6, 0.62);
+  backdrop-filter: blur(3px);
+  animation: drawer-backdrop-in 0.32s ease both;
+}
+
+.experience-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 901;
+  display: flex;
+  flex-direction: column;
+  width: min(560px, 92vw);
+  height: 100vh;
+  height: 100dvh;
+  background: #111211;
+  border-left: 1px solid #3c3c3c;
+  color: #f1f1ed;
+  font-family: Manrope, Arial, sans-serif;
+  animation: drawer-in 0.42s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+@keyframes drawer-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes drawer-in {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+.experience-drawer__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  padding: 20px 28px;
+  border-bottom: 1px solid #3c3c3c;
+}
+
+.experience-drawer__eyebrow,
+.experience-drawer__period,
+.experience-drawer__section-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #b0b1a9;
+}
+
+.experience-drawer__close {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.experience-drawer__close:hover {
+  color: #fff;
+}
+
+.experience-drawer__close span {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.experience-drawer__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 32px 28px 56px;
+}
+
+.experience-drawer__period {
+  margin: 0 0 12px;
+}
+
+.experience-drawer__title {
+  margin: 0 0 6px;
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.experience-drawer__role {
+  margin: 0 0 24px;
+  color: #244bea;
+  font-size: 15px;
+}
+
+.experience-drawer__blurb,
+.experience-drawer__context {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #d7d7d2;
+  text-wrap: pretty;
+}
+
+.experience-drawer__context {
+  color: #b0b1a9;
+}
+
+.experience-drawer__highlights {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  margin: 28px 0;
+  background: #3c3c3c;
+  border: 1px solid #3c3c3c;
+}
+
+.experience-drawer__highlight {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 16px;
+  background: #111211;
+}
+
+.experience-drawer__highlight-value {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.experience-drawer__highlight-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #b0b1a9;
+}
+
+.experience-drawer__section-title {
+  margin: 36px 0 14px;
+}
+
+.experience-drawer__bullets {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 14px;
+}
+
+.experience-drawer__bullets li {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #d7d7d2;
+}
+
+.experience-drawer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin-top: 32px;
+  padding-top: 20px;
+  border-top: 1px solid #3c3c3c;
+}
+
+.experience-drawer__links a,
+.experience-drawer__resume {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #f1f1ed;
+  text-decoration: none;
+}
+
+.experience-drawer__links a:hover,
+.experience-drawer__resume:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.experience-drawer__resume {
+  display: inline-flex;
+  margin-top: 28px;
+  color: #244bea;
+}
+
+.drawer-open body {
+  overflow: hidden;
+}
+
 /* Extended index pages. */
 .folio-subpage {
   padding: var(--folio-pad);

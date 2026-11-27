@@ -99,9 +99,61 @@ test('animations: CSS scroll reveals, stagger, hover, reduced motion', () => {
   assert.equal(existsSync(join(root, 'components/shell/ScrollReveal.tsx')), false)
   for (const f of ['components/sections/FolioSkills.tsx', 'components/sections/FolioWriting.tsx',
     'components/sections/FolioExperience.tsx', 'components/case-study/CaseStudy.tsx',
-    'components/shell/Shell.tsx']) {
+    'components/experience/ExperienceList.tsx']) {
     assert.match(read(f), /data-reveal/, `${f} missing reveal hooks`)
   }
+})
+
+test('rail deck copies the reference algorithm', () => {
+  const shell = read('components/shell/Shell.tsx')
+  assert.match(shell, /fitCardHeight/)
+  assert.match(shell, /\(height - 8 \* \(n - 1\)\) \/ \(n \+ 0\.5\)/)
+  assert.match(shell, /--rail-card-height/)
+  assert.match(shell, /--rail-card-gap/)
+  assert.match(shell, /--rail-end-space/)
+  assert.match(shell, /data-project-id/)
+  assert.match(shell, /ResizeObserver/)
+  assert.match(shell, /depthLayer/)
+  assert.match(shell, /matchMedia\('\(min-width: 960px\)'\)/)
+  assert.match(shell, /prefers-reduced-motion/)
+  const css = read('app/reference.css')
+  assert.match(css, /data-deck-active=true\] \.project-index__link\{[^}]*height:var\(--rail-card-height/)
+  assert.match(css, /data-depth-layer=true\]/)
+})
+
+test('every skill icon has a light ink color', () => {
+  const data = read('lib/data.ts')
+  const skillsBlock = data.slice(data.indexOf('export const skills: SkillCategory[]'))
+  const refs = [...new Set([...skillsBlock.matchAll(/icon: '(\/skills\/[^']+)'/g)].map((m) => m[1]))]
+  assert.equal(refs.length, 57)
+  for (const ref of refs) {
+    const svg = readFileSync(join(root, 'public', ref), 'utf8')
+    assert.match(svg, /#f1f1ed/, `${ref} is still black`)
+    assert.doesNotMatch(svg, /stroke="currentColor"|fill="none"[^>]*>\s*<path[^>]*fill="none"/,
+      `${ref} has an invisible stroke`)
+  }
+})
+
+test('experience drawer: portal, overlap, resume detail, a11y', () => {
+  const drawer = read('components/experience/ExperienceDrawer.tsx')
+  assert.match(drawer, /createPortal/)
+  assert.match(drawer, /role="dialog"/)
+  assert.match(drawer, /aria-modal="true"/)
+  assert.match(drawer, /Escape/)
+  assert.match(drawer, /drawer-open/)
+  assert.match(drawer, /experienceDetails/)
+  const css = read('app/globals.css')
+  assert.match(css, /\.experience-drawer \{/)
+  assert.match(css, /position: fixed/)
+  assert.match(css, /@keyframes drawer-in/)
+  assert.doesNotMatch(css, /\.experience-drawer \{[^}]*width: \d+%;/)
+  const details = read('lib/experience-details.ts')
+  assert.match(details, /900\+ RESTful APIs/)
+  assert.match(details, /50K\+ customers/)
+  assert.match(details, /SharkNinja, EcoFlow, Dreame and Vivo/)
+  assert.equal((details.match(/id: '/g) || []).length, 4, 'one detail per resume role')
+  assert.match(read('app/experience/page.tsx'), /ExperienceList/)
+  assert.match(read('components/experience/ExperienceList.tsx'), /aria-haspopup="dialog"/)
 })
 
 test('directed copy: bigger hero, hobbies, updated numbers', () => {
